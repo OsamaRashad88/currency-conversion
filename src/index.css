@@ -1,13 +1,130 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+.Home {
+  display: flex;
+  width: 80%;
+  gap: 15px;
+  margin: auto;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.Home div,
+select {
+  width: 30%;
+}
+.Home p {
+  display: inline;
+}
+.buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  width: 60%;
+  margin: auto;
+}
+.buttons button {
+  padding: 15px;
+  border: none;
+  background-color: blue;
+  color: white;
+}
+.results-details {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.results-details button {
+  padding: 15px;
+  border: none;
+  background-color: green;
+  color: white;
+}
+
+.favorite-currency {
+  min-height: 30%;
+  background-color: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo {
+  height: 10%;
+  width: 10%;
+}
+@media screen and (max-width: 1300px) {
+  .Home {
+    margin-left: 5%;
+    width: 70%;
+    justify-content: flex-start;
+  }
+  .Home :first-child {
+    margin-right: 30px;
+  }
+  .Home select {
+    width: 40%;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .Home {
+    display: block;
+    margin-left: 5%;
+    width: 40%;
+    justify-content: flex-start;
+    margin-bottom: 5rem;
+  }
+  .Home select {
+    margin-bottom: 2rem;
+    width: 50%;
+  }
+  .buttons {
+    margin-left: 5%;
+    width: 40%;
+  }
+}
+@media screen and (max-width: 800px) {
+  .Home select {
+    margin-bottom: 2rem;
+    width: 70%;
+  }
+  .buttons {
+    margin-left: 5%;
+    width: 40%;
+  }
+}
+@media screen and (max-width: 630px) {
+  .Home {
+    width: 90%;
+    margin: auto;
+  }
+  .Home div,
+  p,
+  select,
+  input {
+    width: 50%;
+    margin: auto;
+    display: inline-block;
+  }
+  nav {
+    width: 00%;
+  }
+
+  .buttons button {
+    margin-bottom: 1.5rem;
+    width: 50%;
+  }
 }

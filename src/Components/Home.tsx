@@ -26,38 +26,39 @@ const Home: React.FC<HomeProps> = () => {
     "AED",
     "BHD",
   ]);
-  const [favoriteRates, setFavoriteRates] = useState<any>([]); // You might want to replace 'any' with the actual type of your rates data
+  const [favoriteRates, setFavoriteRates] = useState<any>([]);
 
   async function updateRate() {
-    try {
-      const response = await axios.get(
+    let data = await axios
+      .get(
         `http://data.fixer.io/api/latest?access_key=${API_KEY}&base=${currencyOne}&symbols=${favoriteCurrencies}`
+      )
+      .then((res) => {
+        console.log(res.data.rates);
+        setRate(res.data.rates[currencyTwo]);
+        setFavoriteRates(res.data.rates);
+      })
+      .catch((e) =>
+        setErrorMsg("Note:free account only support converstion from / to EUR")
       );
-      console.log(response.data.rates);
-      setRate(response.data.rates[currencyTwo]);
-      setFavoriteRates(response.data.rates);
-    } catch (error) {
-      setErrorMsg("Note: Free accounts only support conversion from/to EUR");
-    }
   }
 
   useEffect(() => {
     updateRate();
   }, [currencyOne, currencyTwo]);
 
-  async function fetchData() {
-    try {
-      const { data } = await axios.get(
-        `http://data.fixer.io/api/latest?access_key=${API_KEY}`
-      );
-      setAllCurrencies(Object.keys(data.rates));
-    } catch (error) {
-      // Handle error
-    }
+  async function fetchdata() {
+    let { data } = await axios.get(
+      `http://data.fixer.io/api/latest?access_key=${API_KEY}`
+    );
+    setAllCurrencies(Object.keys(data.rates));
   }
+  useEffect(() => {
+    fetchdata();
+  }, []);
 
   useEffect(() => {
-    fetchData();
+    fetchdata();
   }, []);
 
   function getResult() {

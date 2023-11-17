@@ -13,7 +13,7 @@ const Home: React.FC = () => {
   const [rate, setRate] = useState<number | undefined>();
   const [allCurrencies, setAllCurrencies] = useState<string[]>([]);
   const [result, setResult] = useState<number | undefined>();
-  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [noteMsg, setNoterMsg] = useState<string>("");
   const [favoriteCurrencies, setFavoriteCurrencies] = useState<string[]>([
     currencyTwo,
     "AUD",
@@ -31,38 +31,50 @@ const Home: React.FC = () => {
   );
 
   async function updateRate() {
-    let data = await axios
-      .get(
-        `http://data.fixer.io/api/latest?access_key=${API_KEY}&base=${currencyOne}&symbols=${favoriteCurrencies}`
-      )
-      .then((res) => {
-        console.log(res.data.rates);
-        setRate(res.data.rates[currencyTwo]);
-        setFavoriteRates(res.data.rates);
-      })
-      .catch((e) =>
-        setErrorMsg("Note:free account only support converstion from / to EUR")
-      );
+    //convert from euro
+    if (currencyOne == "EUR") {
+      let data = await axios
+        .get(
+          `http://data.fixer.io/api/latest?access_key=${API_KEY}&base=${currencyOne}&symbols=${favoriteCurrencies}`
+        )
+        .then((res) => {
+          console.log(res.data.rates);
+          setRate(res.data.rates[currencyTwo]);
+          setFavoriteRates(res.data.rates);
+        });
+    }
+    if (currencyTwo == "EUR") {
+      let data = await axios
+        .get(
+          `http://data.fixer.io/api/latest?access_key=${API_KEY}&base=${currencyTwo}&symbols=${currencyOne}`
+        )
+        .then((res) => {
+          setRate(res.data.rates[currencyOne]);
+          setFavoriteCurrencies([currencyOne]);
+        });
+    }
+    if (currencyOne != "EUR" && currencyTwo != "EUR") {
+      setNoterMsg("you can only transfer from / to euro");
+    }
   }
 
   useEffect(() => {
     updateRate();
   }, [currencyOne, currencyTwo]);
 
-  async function fetchdata() {
+  async function getAllcurrencies() {
     let { data } = await axios.get(
       `http://data.fixer.io/api/latest?access_key=${API_KEY}`
     );
     setAllCurrencies(Object.keys(data.rates));
   }
   useEffect(() => {
-    fetchdata();
+    getAllcurrencies();
   }, []);
 
   function getResult() {
-    if (currencyOne === "EUR" || currencyTwo === "EUR") {
+    if (currencyOne === "EUR") {
       setResult(amount * (rate || 0));
-      setErrorMsg("");
     }
 
     if (currencyTwo === "EUR") {
@@ -71,7 +83,6 @@ const Home: React.FC = () => {
 
     if (currencyOne !== "EUR" && currencyTwo !== "EUR") {
       setRate(0);
-      setErrorMsg("");
     }
   }
 
@@ -138,20 +149,25 @@ const Home: React.FC = () => {
       </div>
       <div className="results-details">
         <h3>Result ={isNaN(result || 0) ? "" : result}</h3>
-        <p> {errorMsg}</p>
+        <p> {noteMsg}</p>
         <Link to={`/${currencyOne}/${currencyTwo}`}>
-          <button>details</button>
+          <button disabled={currencyOne !== "EUR" && currencyTwo !== "EUR"}>
+            details
+          </button>
         </Link>
       </div>
       <div className="container">
         <div className="row">
-          {result &&
-            Object.keys(favoriteRates).map((item) => (
-              <div key={item} className="col-md-4">
-                <p>{item}</p>
-                <div className="favorite-currency">{favoriteRates[item]}</div>
-              </div>
-            ))}
+          {result && currencyOne == "EUR"
+            ? Object.keys(favoriteRates).map((item) => (
+                <div key={item} className="col-md-4">
+                  <p>{item}</p>
+                  <div className="favorite-currency">
+                    {favoriteRates[item] * amount}
+                  </div>
+                </div>
+              ))
+            : ""}
         </div>
       </div>
     </>

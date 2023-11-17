@@ -1,15 +1,15 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-interface HomeProps {}
+import { amountContext } from "../context/Amountcontext";
 
 const API_KEY = "eed0498ddd3fae19044796749deee771";
 
-const Home: React.FC<HomeProps> = () => {
+const Home: React.FC = () => {
+  const { amount, setAmount } = useContext(amountContext);
+
   const [currencyOne, setCurrencyOne] = useState<string>("EUR");
   const [currencyTwo, setCurrencyTwo] = useState<string>("USD");
-  const [amount, setAmount] = useState<number>(1);
   const [rate, setRate] = useState<number | undefined>();
   const [allCurrencies, setAllCurrencies] = useState<string[]>([]);
   const [result, setResult] = useState<number | undefined>();
@@ -26,7 +26,9 @@ const Home: React.FC<HomeProps> = () => {
     "AED",
     "BHD",
   ]);
-  const [favoriteRates, setFavoriteRates] = useState<any>([]);
+  const [favoriteRates, setFavoriteRates] = useState<Record<string, number>>(
+    {}
+  );
 
   async function updateRate() {
     let data = await axios
@@ -53,10 +55,6 @@ const Home: React.FC<HomeProps> = () => {
     );
     setAllCurrencies(Object.keys(data.rates));
   }
-  useEffect(() => {
-    fetchdata();
-  }, []);
-
   useEffect(() => {
     fetchdata();
   }, []);

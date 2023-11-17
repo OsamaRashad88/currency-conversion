@@ -1,9 +1,5 @@
 import React from "react";
 
 export default function Details() {
-  return (
-    <>
-      <div className="convert-details"></div>
-    </>
-  );
+  return <div>Details</div>;
 }

@@ -6,6 +6,8 @@ import Home from "./Components/Home.tsx";
 import { Link, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./Layout";
 import Details from "./Components/Details.jsx";
+import { AmountContextProvider } from "./context/Amountcontext";
+
 const routers = createBrowserRouter([
   {
     path: "/",
@@ -17,6 +19,10 @@ const routers = createBrowserRouter([
   },
 ]);
 function App() {
-  return <RouterProvider router={routers}></RouterProvider>;
+  return (
+    <AmountContextProvider>
+      <RouterProvider router={routers}></RouterProvider>
+    </AmountContextProvider>
+  );
 }
 export default App;

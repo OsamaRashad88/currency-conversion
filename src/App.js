@@ -5,8 +5,8 @@ import "../node_modules/bootstrap/dist/js/bootstrap.min.js";
 import Home from "./Components/Home.tsx";
 import { Link, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./Layout";
-import Details from "./Components/Details.jsx";
-import { AmountContextProvider } from "./context/Amountcontext";
+import Details from "./Components/Details.tsx";
+import { CurrencyContexttProvider } from "./context/Context.js";
 
 const routers = createBrowserRouter([
   {
@@ -20,9 +20,9 @@ const routers = createBrowserRouter([
 ]);
 function App() {
   return (
-    <AmountContextProvider>
+    <CurrencyContexttProvider>
       <RouterProvider router={routers}></RouterProvider>
-    </AmountContextProvider>
+    </CurrencyContexttProvider>
   );
 }
 export default App;

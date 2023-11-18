@@ -1,15 +1,19 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { amountContext } from "../context/Amountcontext";
-
-const API_KEY = "eed0498ddd3fae19044796749deee771";
+import { currencyContext } from "../context/Context";
+const API_KEY = "69543df49080abd8fc2007d5a37e5120";
 
 const Home: React.FC = () => {
-  const { amount, setAmount } = useContext(amountContext);
+  const {
+    currencyOne,
+    currencyTwo,
+    setCurrencyOne,
+    setCurrencyTwo,
+    amount,
+    setAmount,
+  } = useContext(currencyContext);
 
-  const [currencyOne, setCurrencyOne] = useState<string>("EUR");
-  const [currencyTwo, setCurrencyTwo] = useState<string>("USD");
   const [rate, setRate] = useState<number | undefined>();
   const [allCurrencies, setAllCurrencies] = useState<string[]>([]);
   const [result, setResult] = useState<number | undefined>();
@@ -30,10 +34,10 @@ const Home: React.FC = () => {
     {}
   );
 
-  async function updateRate() {
+  function updateRate() {
     //convert from euro
     if (currencyOne == "EUR") {
-      let data = await axios
+      let data = axios
         .get(
           `http://data.fixer.io/api/latest?access_key=${API_KEY}&base=${currencyOne}&symbols=${favoriteCurrencies}`
         )
@@ -44,7 +48,7 @@ const Home: React.FC = () => {
         });
     }
     if (currencyTwo == "EUR") {
-      let data = await axios
+      let data = axios
         .get(
           `http://data.fixer.io/api/latest?access_key=${API_KEY}&base=${currencyTwo}&symbols=${currencyOne}`
         )
@@ -61,7 +65,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     updateRate();
   }, [currencyOne, currencyTwo]);
-
+  useEffect(() => {}, []);
   async function getAllcurrencies() {
     let { data } = await axios.get(
       `http://data.fixer.io/api/latest?access_key=${API_KEY}`
@@ -84,6 +88,7 @@ const Home: React.FC = () => {
     if (currencyOne !== "EUR" && currencyTwo !== "EUR") {
       setRate(0);
     }
+    console.log(currencyOne, currencyTwo);
   }
 
   function swap() {
@@ -148,7 +153,9 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className="results-details">
-        <h3>Result ={isNaN(result || 0) ? "" : result}</h3>
+        <h3>
+          Result ={isNaN(result || 0) ? "" : result} {result && currencyTwo}
+        </h3>
         <p> {noteMsg}</p>
         <Link to={`/${currencyOne}/${currencyTwo}`}>
           <button disabled={currencyOne !== "EUR" && currencyTwo !== "EUR"}>
@@ -156,19 +163,15 @@ const Home: React.FC = () => {
           </button>
         </Link>
       </div>
-      <div className="container">
-        <div className="row">
-          {result && currencyOne == "EUR"
-            ? Object.keys(favoriteRates).map((item) => (
-                <div key={item} className="col-md-4">
-                  <p>{item}</p>
-                  <div className="favorite-currency">
-                    {favoriteRates[item] * amount}
-                  </div>
-                </div>
-              ))
-            : ""}
-        </div>
+      <div className="top-currencies">
+        {result && currencyOne == "EUR"
+          ? Object.keys(favoriteRates).map((item) => (
+              <div key={item} className="favorite-currency">
+                <p>{item}</p>
+                <div>{favoriteRates[item] * amount}</div>
+              </div>
+            ))
+          : ""}
       </div>
     </>
   );

@@ -140,13 +140,13 @@ const Details: React.FC<DetailsProps> = () => {
           </div>
 
           <div>
-            <p>from</p>
+            <h5>from</h5>
             <select disabled>
               <option value={currencyOne}>{currencyOne}</option>
             </select>
           </div>
           <div>
-            <p>TO</p>
+            <h5>TO</h5>
             <select
               value={to}
               onChange={(e) => {

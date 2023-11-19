@@ -98,57 +98,65 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <h1>currencies exchange</h1>
-      <h5>convert from / to EUR</h5>
-      <div className="Home">
-        <div>
-          <label htmlFor="amount">amount</label>
-          <input
-            type="number"
-            id="amount"
-            name="amount"
-            placeholder="please enter an amount"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-          />
-        </div>
+      <div className="wrapper">
+        <h1>currencies exchange</h1>
+        <h5>convert from / to EUR</h5>
+        <div className="Home">
+          <div className="input">
+            <label htmlFor="amount">amount</label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              placeholder="please enter an amount"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
+          </div>
 
-        <div>
-          <p>From</p>
-          <select
-            value={currencyOne}
-            onChange={(e) => {
-              setCurrencyOne(e.target.value);
-            }}
-          >
-            {allCurrencies.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+          <div>
+            <p>From</p>
+            <select
+              value={currencyOne}
+              onChange={(e) => {
+                setCurrencyOne(e.target.value);
+              }}
+            >
+              {allCurrencies.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <button onClick={swap} disabled={amount === 0}>
+              swap
+            </button>
+          </div>
+          <div>
+            <p>TO</p>
+            <select
+              value={currencyTwo}
+              onChange={(e) => {
+                setCurrencyTwo(e.target.value);
+              }}
+            >
+              {allCurrencies.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div>
-          <p>TO</p>
-          <select
-            value={currencyTwo}
-            onChange={(e) => {
-              setCurrencyTwo(e.target.value);
-            }}
+        <div className="submit">
+          <button
+            className="submit"
+            onClick={() => getResult()}
+            disabled={amount === 0}
           >
-            {allCurrencies.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="buttons">
-          <button onClick={() => getResult()} disabled={amount === 0}>
             convert
-          </button>
-          <button onClick={swap} disabled={amount === 0}>
-            swap
           </button>
         </div>
       </div>
@@ -163,15 +171,18 @@ const Home: React.FC = () => {
           </button>
         </Link>
       </div>
-      <div className="top-currencies">
-        {result && currencyOne == "EUR"
-          ? Object.keys(favoriteRates).map((item) => (
-              <div key={item} className="favorite-currency">
-                <p>{item}</p>
-                <div>{favoriteRates[item] * amount}</div>
-              </div>
-            ))
-          : ""}
+
+      <div className="container">
+        <div className="row gx-4">
+          {result && currencyOne == "EUR"
+            ? Object.keys(favoriteRates).map((item) => (
+                <div key={item} className="col-md-3  favorite-currency">
+                  <p>{item}</p>
+                  <p> {favoriteRates[item] * amount}</p>
+                </div>
+              ))
+            : ""}
+        </div>
       </div>
     </>
   );
